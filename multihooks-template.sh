@@ -2,19 +2,15 @@
 
 # Allow multiple hooks.
 #
-# To use it copy this script with executable permission in ".git/hooks/hook-name"
-# where hook-name is the name of the hook (see man githooks to know available hooks).
-# Then place your scripts with executable permission in ".git/hooks/hook-name.d/".
+# To use it copy file to ./git/hooks directory or to directory pointed in git config core.hooksPath.
+# Next create symbolic links from this file to hook files. This script should have execution rights.
+# Put your scripts in <<HOOK_NAME>>.d folders in your hook directory. Scripts will be executed in
 #
 # Original code https://gist.github.com/damienrg/411f63a5120206bb887929f4830ad0d0
+#
 
 hook_type=${BASH_SOURCE##*/}
 hook_dir="${BASH_SOURCE[0]}.d"
-
-echo $hook_type
-echo Params
-echo $@
-echo -------------
 
 case "$hook_type" in
   applypatch-msg | \
@@ -33,7 +29,7 @@ case "$hook_type" in
   pre-receive | \
   update)
   IFS= read -rd '' stdin
-  if [[ -d $hook_dir && "$(ls -A ${hook_dir})" ]]; then
+  if [[ -d $hook_dir && "$(ls -I .gitkeep -A ${hook_dir})" ]]; then
       for file in "${hook_dir}"/*; do
         "./$file" "$@" <<<"$stdin" || exit 2
       done
