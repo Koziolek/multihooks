@@ -11,6 +11,8 @@
 hook_type=${BASH_SOURCE##*/}
 hook_dir="${BASH_SOURCE[0]}.d"
 
+echo $hook_type
+
 case "$hook_type" in
 applypatch-msg | \
   commit-msg | \
