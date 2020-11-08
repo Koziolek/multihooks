@@ -30,7 +30,7 @@ applypatch-msg | \
   pre-receive | \
   update)
   IFS= read -rd '' stdin
-  if [[ -d $hook_dir && "$(ls -A ${hook_dir}/*)" ]]; then
+  if [[ -d $hook_dir && "$(ls -A ${hook_dir})" ]]; then
       for file in "${hook_dir}"/*; do
         "./$file" "$@" <<<"$stdin" || exit 2
       done
